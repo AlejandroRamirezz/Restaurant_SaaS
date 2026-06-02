@@ -233,6 +233,18 @@
       /* ============================================================
        MENU
     ============================================================ */
+
+      .ic-img-wrap picture {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .ic-img-wrap picture img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
       #s-menu {
         background: var(--cream);
       }
@@ -1826,16 +1838,31 @@
         });
       }
 
+      function menuImageHTML(item, imgClass, width, height) {
+        return `
+    <picture>
+      <source srcset="${item.img.avif}" type="image/avif">
+      <img
+        class="${imgClass}"
+        src="${item.img.fallback}"
+        alt="${item.name}"
+        loading="lazy"
+        width="${width}"
+        height="${height}"
+        onerror="this.parentElement.parentElement.style.background='#C9996B1A'"
+      >
+    </picture>
+  `;
+      }
+
       function makeCard(item) {
         const el = document.createElement("div");
         el.className = "item-card";
         el.id = "icard-" + item.id;
+
         el.innerHTML = `
     <div class="ic-img-wrap">
-      <img class="ic-img" loading="lazy"
-        src="${item.img}?auto=compress&cs=tinysrgb&w=320&h=240&dpr=1&fit=crop"
-        alt="${item.name}" width="160" height="120"
-        onerror="this.parentElement.style.background='#C9996B1A'" />
+      ${menuImageHTML(item, "ic-img", 160, 120)}
     </div>
     <div class="ic-body">
       <div class="ic-name">${item.name}</div>
@@ -1844,7 +1871,9 @@
         <span class="ic-price">$${item.price.toFixed(2)}</span>
         <div id="ctrl-${item.id}">${ctrlHTML(item.id, ST.cart[item.id]?.qty || 0)}</div>
       </div>
-    </div>`;
+    </div>
+  `;
+
         return el;
       }
 
@@ -1962,9 +1991,17 @@
         let rows = "";
         for (const { item, qty } of Object.values(ST.cart)) {
           rows += `<div class="cart-row">
-      <img class="cr-img"
-        src="${item.img}?auto=compress&cs=tinysrgb&w=120&h=120&dpr=1&fit=crop"
-        alt="${item.name}" loading="lazy" width="54" height="54" />
+     <picture>
+  <source srcset="${item.img.avif}" type="image/avif">
+  <img
+    class="cr-img"
+    src="${item.img.fallback}"
+    alt="${item.name}"
+    loading="lazy"
+    width="54"
+    height="54"
+  >
+</picture>
       <div class="cr-info">
         <div class="cr-name">${item.name}</div>
         <div class="cr-price">$${(item.price * qty).toFixed(2)}</div>
