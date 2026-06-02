@@ -1,0 +1,1542 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#5C4F4A" />
+    <title>Bella Tavola · Panel</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --cream: #ede9e6;
+        --tan: #c9996b;
+        --brown: #5c4f4a;
+        --teal: #5c766d;
+        --white: #f7f4f1;
+        --text: #2c2220;
+        --muted: #8c7f7b;
+        --border: #dedad7;
+        --safe-t: env(safe-area-inset-top, 0px);
+        --safe-b: env(safe-area-inset-bottom, 0px);
+      }
+
+      html {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        -webkit-appearance: none;
+        appearance: none;
+        font-family: inherit;
+        border-radius: 0;
+        cursor: pointer;
+      }
+
+      .screen {
+        display: none;
+        min-height: 100dvh;
+        flex-direction: column;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* ============================================================
+       LOGIN
+    ============================================================ */
+      #s-login {
+        background: var(--brown);
+        justify-content: flex-end;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .l-bg-wrap {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .l-bg-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.12;
+      }
+
+      .l-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: calc(2.5rem + var(--safe-t)) 1.5rem 0;
+      }
+
+      .l-mark {
+        width: 40px;
+        height: 40px;
+        background: var(--tan);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+      }
+      .l-mark svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--cream);
+        fill: none;
+        stroke-width: 1.8;
+      }
+
+      .l-name {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--cream);
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      .l-role {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(237, 233, 230, 0.4);
+        margin-top: 0.4rem;
+      }
+
+      .l-form {
+        position: relative;
+        z-index: 1;
+        background: var(--cream);
+        padding: 1.75rem 1.5rem calc(1.75rem + var(--safe-b));
+      }
+
+      .l-head {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--brown);
+        margin-bottom: 1.25rem;
+      }
+
+      .l-field {
+        margin-bottom: 0.75rem;
+      }
+      .lf-lbl {
+        display: block;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.4rem;
+      }
+      .lf-inp {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        font-size: 0.95rem;
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.18s;
+      }
+      .lf-inp:focus {
+        border-color: var(--tan);
+      }
+      .lf-inp::placeholder {
+        color: #bdb5b1;
+      }
+      .lf-inp.err {
+        border-color: #c05050;
+        animation: shake 0.35s;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-6px);
+        }
+        75% {
+          transform: translateX(6px);
+        }
+      }
+
+      .l-err {
+        font-size: 0.78rem;
+        color: #c05050;
+        margin-bottom: 0.75rem;
+        display: none;
+      }
+      .l-err.on {
+        display: block;
+      }
+
+      .l-btn {
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        background: var(--brown);
+        color: var(--cream);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transition:
+          background 0.15s,
+          transform 0.1s;
+      }
+      .l-btn:active {
+        transform: scale(0.98);
+        background: #4a3f3a;
+      }
+
+      .l-hint {
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 1rem;
+      }
+      .l-hint code {
+        background: #e2deda;
+        padding: 0.1rem 0.3rem;
+        font-size: 0.68rem;
+        font-family: monospace;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.72rem;
+        color: var(--muted);
+        text-decoration: none;
+        margin-bottom: 1.25rem;
+      }
+      .back-link svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+      }
+      .back-link:hover {
+        color: var(--brown);
+      }
+
+      /* ============================================================
+       DASHBOARD
+    ============================================================ */
+      #s-dash {
+        background: var(--cream);
+      }
+
+      .dh-wrap {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .dh {
+        background: var(--brown);
+        padding: calc(0.875rem + var(--safe-t)) 1.25rem 0.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .dh-l {
+        display: flex;
+        flex-direction: column;
+      }
+      .dh-name {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--cream);
+      }
+      .dh-sub {
+        font-size: 0.65rem;
+        color: rgba(237, 233, 230, 0.5);
+        margin-top: 2px;
+      }
+
+      .logout-btn {
+        background: rgba(237, 233, 230, 0.1);
+        border: 1px solid rgba(237, 233, 230, 0.15);
+        color: rgba(237, 233, 230, 0.7);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.4rem 0.8rem;
+        transition: background 0.15s;
+      }
+      .logout-btn:active {
+        background: rgba(237, 233, 230, 0.2);
+      }
+
+      .dtabs {
+        background: var(--brown);
+        display: flex;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .dtabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .dtab {
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        padding: 0.6rem 1.1rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: rgba(237, 233, 230, 0.42);
+        border-bottom: 2px solid transparent;
+        white-space: nowrap;
+        transition:
+          color 0.15s,
+          border-color 0.15s;
+      }
+      .dtab.on {
+        color: var(--tan);
+        border-bottom-color: var(--tan);
+      }
+
+      .dash-body {
+        flex: 1;
+      }
+      .tab-pane {
+        display: none;
+        padding-bottom: calc(1.5rem + var(--safe-b));
+      }
+      .tab-pane.on {
+        display: block;
+      }
+
+      /* ── SHARED COMPONENTS ───────────── */
+
+      /* Spacer between section groups */
+      .gap {
+        height: 8px;
+      }
+
+      /* Section label (above grouped cards) */
+      .sec-lbl {
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 1.1rem 1.25rem 0.5rem;
+        display: block;
+      }
+
+      /* KPI grid */
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--border);
+      }
+
+      .kpi-card {
+        background: var(--white);
+        padding: 1rem 1.1rem 1.1rem;
+        border-top: 3px solid var(--border);
+      }
+      .kpi-card.c-tan {
+        border-top-color: var(--tan);
+      }
+      .kpi-card.c-teal {
+        border-top-color: var(--teal);
+      }
+      .kpi-card.c-brown {
+        border-top-color: var(--brown);
+      }
+      .kpi-card.c-muted {
+        border-top-color: #bdb5b1;
+      }
+      .kpi-card.full {
+        grid-column: 1 / -1;
+      }
+
+      .kpi-v {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--brown);
+        letter-spacing: -0.025em;
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+      .kpi-v sup {
+        font-size: 0.85rem;
+        font-weight: 700;
+        vertical-align: super;
+      }
+      .kpi-v sub {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--muted);
+        vertical-align: baseline;
+      }
+      .kpi-l {
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .kpi-d {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--teal);
+        margin-top: 0.3rem;
+      }
+
+      /* Chart card */
+      .cc {
+        background: var(--white);
+        padding: 1.25rem;
+        margin-bottom: 8px;
+      }
+
+      .cc-title {
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      /* Horizontal bar */
+      .hb {
+        margin-bottom: 0.875rem;
+      }
+      .hb:last-child {
+        margin-bottom: 0;
+      }
+      .hb-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.3rem;
+      }
+      .hb-name {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--brown);
+      }
+      .hb-val {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--teal);
+      }
+      .hb-track {
+        height: 5px;
+        background: var(--cream);
+      }
+      .hb-fill {
+        height: 100%;
+        transition: width 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
+      }
+
+      /* Data table */
+      .tbl-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: -0.25rem;
+      }
+      .dtbl {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 380px;
+      }
+      .dtbl th {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: var(--cream);
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+      .dtbl td {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.8rem;
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+      }
+      .dtbl tr:last-child td {
+        border-bottom: none;
+      }
+      .dtbl td:first-child {
+        font-weight: 600;
+        color: var(--brown);
+      }
+      .dtbl td.r {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .dtbl td.good {
+        color: var(--teal);
+        font-weight: 700;
+      }
+      .dtbl td.warn {
+        color: #b07040;
+        font-weight: 700;
+      }
+
+      /* Returns */
+      .ret-item {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        padding: 0.875rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .ret-item:last-child {
+        border-bottom: none;
+      }
+      .ret-badge {
+        width: 34px;
+        height: 34px;
+        background: #f3ecea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #c05050;
+        flex-shrink: 0;
+      }
+      .ret-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--brown);
+      }
+      .ret-reason {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      /* Ops grid */
+      .ops-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--border);
+        margin-bottom: 8px;
+      }
+      .ops-card {
+        background: var(--white);
+        padding: 1.1rem 1.25rem;
+      }
+      .ops-v {
+        font-size: 1.7rem;
+        font-weight: 800;
+        color: var(--brown);
+        letter-spacing: -0.025em;
+        line-height: 1;
+      }
+      .ops-u {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--teal);
+        margin-top: 0.1rem;
+      }
+      .ops-l {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 0.5rem;
+      }
+
+      /* Split visual */
+      .split-bar {
+        height: 10px;
+        display: flex;
+        background: var(--cream);
+        margin: 0.5rem 0;
+      }
+      .split-legend {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        margin-top: 0.6rem;
+      }
+      .split-item {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .split-dot {
+        width: 8px;
+        height: 8px;
+        flex-shrink: 0;
+      }
+
+      /* Rating */
+      .rating-big {
+        text-align: center;
+        padding: 1.25rem 0 0.5rem;
+      }
+      .rat-num {
+        font-size: 3.8rem;
+        font-weight: 800;
+        color: var(--brown);
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .rat-stars {
+        font-size: 1.3rem;
+        margin: 0.35rem 0 0.2rem;
+        letter-spacing: 0.05rem;
+      }
+      .rat-cnt {
+        font-size: 0.7rem;
+        color: var(--muted);
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .star-dist {
+        margin-top: 1.25rem;
+      }
+      .sr {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      .sr:last-child {
+        margin-bottom: 0;
+      }
+      .sr-l {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        width: 16px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .sr-track {
+        flex: 1;
+        height: 7px;
+        background: var(--cream);
+      }
+      .sr-fill {
+        height: 100%;
+        background: var(--tan);
+      }
+      .sr-n {
+        font-size: 0.7rem;
+        color: var(--muted);
+        width: 30px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      /* donut */
+      .donut-wrap {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .donut-legend {
+        flex: 1;
+        min-width: 130px;
+      }
+      .leg-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.55rem;
+      }
+      .leg-item:last-child {
+        margin-bottom: 0;
+      }
+      .leg-dot {
+        width: 10px;
+        height: 10px;
+        flex-shrink: 0;
+      }
+      .leg-name {
+        flex: 1;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--brown);
+      }
+      .leg-pct {
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      /* Sparkline wrapper */
+      .spark-wrap {
+        margin-top: 0.75rem;
+        height: 48px;
+        overflow: hidden;
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: calc(1rem + var(--safe-b));
+        left: 1rem;
+        right: 1rem;
+        background: var(--brown);
+        color: var(--cream);
+        font-size: 0.84rem;
+        font-weight: 500;
+        padding: 0.65rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 400;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .toast-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--tan);
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================================
+     LOGIN
+============================================================ -->
+    <section id="s-login" class="screen active" aria-label="Admin login">
+      <picture class="l-bg-wrap">
+        <source
+          type="image/avif"
+          srcset="
+            https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&dpr=1&fm=avif
+          "
+        />
+        <img
+          src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&dpr=1&fm=jpg"
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+        />
+      </picture>
+
+      <div class="l-top">
+        <div class="l-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3C8 3 4 7 4 12s4 9 8 9 8-4 8-9-4-9-8-9z" />
+            <path d="M9 12l2 2 4-4" />
+          </svg>
+        </div>
+        <h1 class="l-name">Bella<br />Tavola</h1>
+        <p class="l-role">Panel Administrativo</p>
+      </div>
+
+      <div class="l-form">
+        <a href="menu.html" class="back-link">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+          Volver al menú
+        </a>
+
+        <p class="l-head">Acceso de personal</p>
+
+        <div class="l-field">
+          <label class="lf-lbl" for="l-user">Usuario</label>
+          <input
+            class="lf-inp"
+            type="text"
+            id="l-user"
+            placeholder="admin"
+            autocomplete="username"
+            autocapitalize="none"
+            autocorrect="off"
+          />
+        </div>
+        <div class="l-field">
+          <label class="lf-lbl" for="l-pass">Contraseña</label>
+          <input
+            class="lf-inp"
+            type="password"
+            id="l-pass"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <p class="l-err" id="l-err">Usuario o contraseña incorrectos.</p>
+
+        <button class="l-btn" onclick="doLogin()">Ingresar</button>
+
+        <p class="l-hint">
+          Demo: usuario <code>admin</code> · contraseña <code>admin123</code>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+     DASHBOARD
+============================================================ -->
+    <section id="s-dash" class="screen" aria-label="Panel administrativo">
+      <div class="dh-wrap">
+        <header class="dh">
+          <div class="dh-l">
+            <span class="dh-name">Bella Tavola</span>
+            <span class="dh-sub">Últimos 30 días · Panel Admin</span>
+          </div>
+          <button class="logout-btn" onclick="doLogout()">Salir</button>
+        </header>
+        <nav class="dtabs" role="tablist" aria-label="Secciones">
+          <button
+            class="dtab on"
+            onclick="switchTab(this, 't-resumen')"
+            role="tab"
+            aria-selected="true"
+          >
+            Resumen
+          </button>
+          <button class="dtab" onclick="switchTab(this, 't-ventas')" role="tab">
+            Ventas
+          </button>
+          <button
+            class="dtab"
+            onclick="switchTab(this, 't-platillos')"
+            role="tab"
+          >
+            Platillos
+          </button>
+          <button class="dtab" onclick="switchTab(this, 't-ops')" role="tab">
+            Operaciones
+          </button>
+          <button
+            class="dtab"
+            onclick="switchTab(this, 't-clientes')"
+            role="tab"
+          >
+            Clientes
+          </button>
+        </nav>
+      </div>
+
+      <div class="dash-body">
+        <!-- ── RESUMEN ───────────────────────── -->
+        <div id="t-resumen" class="tab-pane on">
+          <div class="kpi-grid" style="margin-bottom: 8px">
+            <!-- Full-width: total sales + sparkline -->
+            <div class="kpi-card c-tan full">
+              <div class="kpi-v"><sup>$</sup>47,832</div>
+              <div class="kpi-l">Ventas Totales — 30 días</div>
+              <div class="spark-wrap" id="spark"></div>
+            </div>
+            <div class="kpi-card c-teal">
+              <div class="kpi-v"><sup>$</sup>89.50</div>
+              <div class="kpi-l">Ticket Prom. / Mesa</div>
+            </div>
+            <div class="kpi-card c-teal">
+              <div class="kpi-v"><sup>$</sup>24.30</div>
+              <div class="kpi-l">Ticket Prom. / Persona</div>
+            </div>
+            <div class="kpi-card c-brown">
+              <div class="kpi-v">18.4<sub>%</sub></div>
+              <div class="kpi-l">Propina Promedio</div>
+            </div>
+            <div class="kpi-card c-muted">
+              <div class="kpi-v">4.1<sub>/5</sub></div>
+              <div class="kpi-l">Calificación Clientes</div>
+            </div>
+            <div class="kpi-card c-teal">
+              <div class="kpi-v">3.2<sub>×</sub></div>
+              <div class="kpi-l">Rotación de Mesas/día</div>
+            </div>
+            <div class="kpi-card c-muted">
+              <div class="kpi-v">34<sub>%</sub></div>
+              <div class="kpi-l">Pagos Divididos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── VENTAS ────────────────────────── -->
+        <div id="t-ventas" class="tab-pane">
+          <div class="cc">
+            <div class="cc-title">Ventas Diarias (últimos 30 días)</div>
+            <div id="ch-daily"></div>
+          </div>
+          <div class="cc">
+            <div class="cc-title">Ventas por Hora del Día</div>
+            <div id="ch-hourly"></div>
+          </div>
+          <div class="cc">
+            <div class="cc-title">Ventas por Categoría</div>
+            <div class="donut-wrap">
+              <div id="ch-donut"></div>
+              <div class="donut-legend" id="cat-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PLATILLOS ─────────────────────── -->
+        <div id="t-platillos" class="tab-pane">
+          <div class="cc">
+            <div class="cc-title">Más Vendidos (unidades / 30 días)</div>
+            <div id="most-sold"></div>
+          </div>
+          <div class="cc">
+            <div class="cc-title">Menos Vendidos (unidades / 30 días)</div>
+            <div id="least-sold"></div>
+          </div>
+          <div class="cc">
+            <div class="cc-title">Margen Estimado por Platillo</div>
+            <div class="tbl-wrap">
+              <table class="dtbl" id="margins-tbl"></table>
+            </div>
+          </div>
+          <div class="cc">
+            <div class="cc-title">Devoluciones y Quejas</div>
+            <div id="returns-list"></div>
+          </div>
+        </div>
+
+        <!-- ── OPERACIONES ───────────────────── -->
+        <div id="t-ops" class="tab-pane">
+          <div class="ops-grid">
+            <div class="ops-card">
+              <div class="ops-v">14.3</div>
+              <div class="ops-u">minutos</div>
+              <div class="ops-l">Tiempo Prom. Preparación</div>
+            </div>
+            <div class="ops-card">
+              <div class="ops-v">7.8</div>
+              <div class="ops-u">minutos</div>
+              <div class="ops-l">Tiempo Prom. Cierre de Cuenta</div>
+            </div>
+            <div class="ops-card">
+              <div class="ops-v">3.2</div>
+              <div class="ops-u">veces / día</div>
+              <div class="ops-l">Rotación de Mesas</div>
+            </div>
+            <div class="ops-card">
+              <div class="ops-v">
+                34<span style="font-size: 1rem; color: var(--muted)">%</span>
+              </div>
+              <div class="ops-u">del total</div>
+              <div class="ops-l">Pagos Divididos</div>
+            </div>
+          </div>
+
+          <div class="cc">
+            <div class="cc-title">División de Tipo de Pago</div>
+            <div class="split-bar">
+              <div style="width: 34%; background: var(--tan)"></div>
+              <div style="width: 66%; background: var(--teal)"></div>
+            </div>
+            <div class="split-legend">
+              <div class="split-item">
+                <div class="split-dot" style="background: var(--tan)"></div>
+                Dividido (34%)
+              </div>
+              <div class="split-item">
+                <div class="split-dot" style="background: var(--teal)"></div>
+                Individual (66%)
+              </div>
+            </div>
+          </div>
+
+          <div class="cc">
+            <div class="cc-title">
+              Tiempo Promedio de Preparación por Categoría (min)
+            </div>
+            <div id="ch-preptime"></div>
+          </div>
+        </div>
+
+        <!-- ── CLIENTES ──────────────────────── -->
+        <div id="t-clientes" class="tab-pane">
+          <div class="cc">
+            <div class="rating-big">
+              <div class="rat-num">4.1</div>
+              <div class="rat-stars" id="rat-stars"></div>
+              <div class="rat-cnt">312 calificaciones</div>
+            </div>
+            <div class="star-dist" id="rat-dist"></div>
+          </div>
+
+          <div class="cc">
+            <div class="cc-title">Satisfacción por Categoría</div>
+            <div id="ch-satisfaction"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /dash-body -->
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span class="toast-dot"></span>
+      <span id="toast-msg"></span>
+    </div>
+
+    <script>
+      /* ============================================================
+   DATA (hardcoded — últimos 30 días)
+============================================================ */
+      const D = {
+        // Daily sales ($): Mon-Sun cycles, weekends higher
+        daily: [
+          1180, 1140, 1320, 1480, 1860, 2100, 1760, 1230, 1160, 1390, 1560,
+          1940, 2020, 1680, 1280, 1220, 1450, 1620, 2050, 2180, 1820, 1340,
+          1280, 1510, 1740, 2160, 2320, 1980, 1420, 1300,
+        ],
+
+        // Sales by hour (11am–11pm, 13 hours)
+        hours: [
+          "11am",
+          "12pm",
+          "1pm",
+          "2pm",
+          "3pm",
+          "4pm",
+          "5pm",
+          "6pm",
+          "7pm",
+          "8pm",
+          "9pm",
+          "10pm",
+          "11pm",
+        ],
+        hourly: [
+          1420, 3280, 5340, 4820, 2650, 1280, 1890, 4010, 5920, 6380, 5410,
+          3540, 1760,
+        ],
+
+        // Categories
+        cats: ["Pizzas", "Pastas", "Entrées", "Ensaladas", "Bebidas"],
+        catSales: [18090, 12914, 10043, 4305, 2480],
+        catColors: ["#C9996B", "#5C766D", "#5C4F4A", "#8BA89F", "#C4B8B4"],
+
+        // Most sold (units)
+        mostSold: [
+          { n: "Margherita", q: 287 },
+          { n: "Spaghetti Bolognese", q: 241 },
+          { n: "Ensalada César", q: 198 },
+          { n: "Pepperoni", q: 187 },
+          { n: "Salmón a la Parrilla", q: 162 },
+          { n: "Fettuccine Alfredo", q: 148 },
+          { n: "BBQ Chicken", q: 134 },
+          { n: "Lasaña", q: 121 },
+        ],
+
+        // Least sold
+        leastSold: [
+          { n: "Berenjenas al Parm.", q: 23 },
+          { n: "Agua Mineral", q: 31 },
+          { n: "Agua Natural", q: 38 },
+          { n: "Pizza Veggie", q: 45 },
+          { n: "Ensalada Jardín", q: 52 },
+        ],
+
+        // Margins: name, price, est.cost, margin%
+        margins: [
+          { n: "Margherita", p: 13.9, c: 4.5, m: 67.6 },
+          { n: "Pepperoni", p: 14.9, c: 5.2, m: 65.1 },
+          { n: "Four Cheese", p: 15.5, c: 5.8, m: 62.6 },
+          { n: "BBQ Chicken", p: 15.9, c: 6.5, m: 59.1 },
+          { n: "Pizza Veggie", p: 13.5, c: 4.2, m: 68.9 },
+          { n: "Spicy Italian", p: 16.9, c: 6.8, m: 59.8 },
+          { n: "Spaghetti Bolognese", p: 13.9, c: 4.2, m: 69.8 },
+          { n: "Fettuccine Alfredo", p: 12.9, c: 3.5, m: 72.9 },
+          { n: "Penne Arrabbiata", p: 11.9, c: 3.2, m: 73.1 },
+          { n: "Pesto Chicken", p: 14.5, c: 4.8, m: 66.9 },
+          { n: "Lasaña", p: 14.9, c: 5.0, m: 66.4 },
+          { n: "Ensalada César", p: 9.9, c: 2.5, m: 74.7 },
+          { n: "Ensalada Caprese", p: 10.9, c: 3.2, m: 70.6 },
+          { n: "Ensalada Jardín", p: 8.5, c: 2.0, m: 76.5 },
+          { n: "Pollo con Pesto", p: 12.5, c: 3.8, m: 69.6 },
+          { n: "Chicken Parmesan", p: 16.9, c: 7.0, m: 58.6 },
+          { n: "Salmón a la Parrilla", p: 18.9, c: 9.5, m: 49.7 },
+          { n: "Albóndigas Italianas", p: 13.9, c: 5.5, m: 60.4 },
+          { n: "Berenjenas al Parm.", p: 14.5, c: 4.5, m: 69.0 },
+          { n: "Refrescos", p: 2.9, c: 0.4, m: 86.2 },
+          { n: "Limonada", p: 3.5, c: 0.6, m: 82.9 },
+          { n: "Agua Mineral", p: 2.5, c: 0.35, m: 86.0 },
+          { n: "Agua Natural", p: 1.9, c: 0.3, m: 84.2 },
+          { n: "Soda Italiana", p: 3.9, c: 0.7, m: 82.1 },
+          { n: "Café", p: 3.5, c: 0.8, m: 77.1 },
+        ],
+
+        // Returns / complaints
+        returns: [
+          { n: "Spicy Italian", count: 3, reason: "Nivel de picante" },
+          { n: "Penne Arrabbiata", count: 2, reason: "Nivel de picante" },
+          {
+            n: "Berenjenas al Parm.",
+            count: 2,
+            reason: "Temperatura del platillo",
+          },
+          { n: "Chicken Parmesan", count: 1, reason: "Cocción" },
+          { n: "Fettuccine Alfredo", count: 1, reason: "Porción" },
+        ],
+
+        // Prep times by category (minutes)
+        prepCats: ["Pizzas", "Pastas", "Entrées", "Ensaladas", "Bebidas"],
+        prepTimes: [16.2, 13.8, 18.4, 6.5, 2.1],
+
+        // Ratings distribution (1→5 stars)
+        ratingDist: [9, 18, 45, 98, 142],
+
+        // Satisfaction by category (score /5)
+        satCats: ["Pizzas", "Pastas", "Entrées", "Ensaladas", "Bebidas"],
+        satScores: [4.3, 4.0, 3.9, 4.5, 4.2],
+      };
+
+      /* ============================================================
+   AUTH
+============================================================ */
+      const CREDS = { user: "admin", pass: "admin123" };
+
+      (function init() {
+        if (sessionStorage.getItem("cc_admin")) showDash();
+        document.getElementById("l-pass").addEventListener("keydown", (e) => {
+          if (e.key === "Enter") doLogin();
+        });
+      })();
+
+      function doLogin() {
+        const u = document.getElementById("l-user").value.trim();
+        const p = document.getElementById("l-pass").value;
+        const err = document.getElementById("l-err");
+        const pinp = document.getElementById("l-pass");
+
+        if (u === CREDS.user && p === CREDS.pass) {
+          err.classList.remove("on");
+          sessionStorage.setItem("cc_admin", "1");
+          showDash();
+        } else {
+          err.classList.add("on");
+          pinp.classList.add("err");
+          setTimeout(() => pinp.classList.remove("err"), 400);
+          pinp.value = "";
+          pinp.focus();
+        }
+      }
+
+      function doLogout() {
+        sessionStorage.removeItem("cc_admin");
+        document.getElementById("l-user").value = "";
+        document.getElementById("l-pass").value = "";
+        goScreen("s-login");
+      }
+
+      function showDash() {
+        goScreen("s-dash");
+        renderAll();
+      }
+
+      /* ============================================================
+   ROUTING
+============================================================ */
+      function goScreen(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        window.scrollTo(0, 0);
+      }
+
+      function switchTab(btn, id) {
+        document.querySelectorAll(".dtab").forEach((t) => {
+          t.classList.remove("on");
+          t.setAttribute("aria-selected", "false");
+        });
+        btn.classList.add("on");
+        btn.setAttribute("aria-selected", "true");
+        document
+          .querySelectorAll(".tab-pane")
+          .forEach((p) => p.classList.toggle("on", p.id === id));
+      }
+
+      /* ============================================================
+   RENDER ALL CHARTS
+============================================================ */
+      function renderAll() {
+        // Resumen
+        document.getElementById("spark").innerHTML = svgSpark(
+          D.daily,
+          "#C9996B",
+        );
+
+        // Ventas
+        const dLabels = D.daily.map((_, i) =>
+          i === 0
+            ? "Día 1"
+            : i === 6
+              ? "Sem 2"
+              : i === 13
+                ? "Sem 3"
+                : i === 20
+                  ? "Sem 4"
+                  : i === 27
+                    ? "Sem 5"
+                    : i === 29
+                      ? "Hoy"
+                      : "",
+        );
+        document.getElementById("ch-daily").innerHTML = svgLine(
+          D.daily,
+          dLabels,
+          "#C9996B",
+          (v) => "$" + (v / 1000).toFixed(1) + "k",
+        );
+        document.getElementById("ch-hourly").innerHTML = svgBar(
+          D.hourly,
+          D.hours,
+          "#5C766D",
+          (v) => "$" + (v / 1000).toFixed(0) + "k",
+        );
+        renderDonut();
+
+        // Platillos
+        document.getElementById("most-sold").innerHTML = hBars(
+          D.mostSold,
+          "#C9996B",
+          "unid.",
+        );
+        document.getElementById("least-sold").innerHTML = hBars(
+          D.leastSold,
+          "#BDB5B1",
+          "unid.",
+        );
+        document.getElementById("margins-tbl").innerHTML = marginsTable();
+        document.getElementById("returns-list").innerHTML = returnsList();
+
+        // Ops
+        document.getElementById("ch-preptime").innerHTML = svgBar(
+          D.prepTimes,
+          D.prepCats,
+          "#C9996B",
+          (v) => v.toFixed(1) + "m",
+          120,
+        );
+
+        // Clientes
+        document.getElementById("rat-stars").innerHTML = starsHTML(4.1);
+        document.getElementById("rat-dist").innerHTML = ratingDistHTML();
+        document.getElementById("ch-satisfaction").innerHTML = svgBar(
+          D.satScores,
+          D.satCats,
+          "#5C766D",
+          (v) => v.toFixed(1),
+          5,
+        );
+      }
+
+      /* ============================================================
+   SVG CHART HELPERS
+============================================================ */
+
+      /* ── Sparkline (mini, no axes) ── */
+      function svgSpark(data, color) {
+        const W = 400,
+          H = 48,
+          p = 2;
+        const iW = W - p * 2,
+          iH = H - p * 2;
+        const max = Math.max(...data),
+          min = Math.min(...data);
+        const xp = (i) => p + (i / (data.length - 1)) * iW;
+        const yp = (v) => p + iH - ((v - min) / (max - min)) * iH;
+        const pts = data
+          .map((v, i) => `${xp(i).toFixed(1)},${yp(v).toFixed(1)}`)
+          .join(" ");
+        const area = `${p},${p + iH} ${pts} ${xp(data.length - 1)},${p + iH}`;
+        return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="none" style="display:block">
+    <polygon points="${area}" fill="${color}" opacity=".12"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${xp(data.length - 1)}" cy="${yp(data[data.length - 1])}" r="3" fill="${color}"/>
+  </svg>`;
+      }
+
+      /* ── Line chart ── */
+      function svgLine(data, labels, color, fmtY) {
+        const W = 520,
+          H = 170,
+          pt = 10,
+          pr = 14,
+          pb = 28,
+          pl = 46;
+        const iW = W - pl - pr,
+          iH = H - pt - pb;
+        const max = Math.max(...data);
+        const xp = (i) => pl + (i / (data.length - 1)) * iW;
+        const yp = (v) => pt + iH - (v / max) * iH;
+        const pts = data
+          .map((v, i) => `${xp(i).toFixed(1)},${yp(v).toFixed(1)}`)
+          .join(" ");
+        const area = `${xp(0).toFixed(1)},${pt + iH} ${pts} ${xp(data.length - 1).toFixed(1)},${pt + iH}`;
+
+        let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible">`;
+
+        // Y grid
+        [0.25, 0.5, 0.75, 1].forEach((t) => {
+          const y = pt + iH * (1 - t),
+            v = max * t;
+          s += `<line x1="${pl}" y1="${y.toFixed(1)}" x2="${W - pr}" y2="${y.toFixed(1)}" stroke="#DEDAD7" stroke-width="1"/>`;
+          s += `<text x="${pl - 5}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="10" fill="#8C7F7B">${fmtY ? fmtY(v) : "" + v}</text>`;
+        });
+        s += `<line x1="${pl}" y1="${pt + iH}" x2="${W - pr}" y2="${pt + iH}" stroke="#DEDAD7" stroke-width="1"/>`;
+
+        // Area + line
+        s += `<polygon points="${area}" fill="${color}" opacity=".08"/>`;
+        s += `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+        // Dots + labels at key points
+        data.forEach((v, i) => {
+          const lbl = labels?.[i];
+          if (!lbl) return;
+          s += `<circle cx="${xp(i).toFixed(1)}" cy="${yp(v).toFixed(1)}" r="3.5" fill="${color}" stroke="white" stroke-width="1.5"/>`;
+          s += `<text x="${xp(i).toFixed(1)}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#8C7F7B">${lbl}</text>`;
+        });
+
+        s += "</svg>";
+        return s;
+      }
+
+      /* ── Vertical bar chart ── */
+      function svgBar(data, labels, color, fmtY, maxOverride) {
+        const W = 520,
+          H = 170,
+          pt = 10,
+          pr = 14,
+          pb = 28,
+          pl = 46;
+        const iW = W - pl - pr,
+          iH = H - pt - pb;
+        const max = maxOverride || Math.max(...data);
+        const bW = (iW / data.length) * 0.62;
+        const gap = iW / data.length;
+        const xp = (i) => pl + i * gap + (gap - bW) / 2;
+        const yp = (v) => pt + iH - (v / max) * iH;
+        const bh = (v) => (v / max) * iH;
+
+        let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">`;
+
+        [0.25, 0.5, 0.75, 1].forEach((t) => {
+          const y = pt + iH * (1 - t),
+            v = max * t;
+          s += `<line x1="${pl}" y1="${y.toFixed(1)}" x2="${W - pr}" y2="${y.toFixed(1)}" stroke="#DEDAD7" stroke-width="1"/>`;
+          s += `<text x="${pl - 5}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="10" fill="#8C7F7B">${fmtY ? fmtY(v) : "" + Math.round(v)}</text>`;
+        });
+
+        data.forEach((v, i) => {
+          const x = xp(i),
+            y = yp(v),
+            h = bh(v);
+          s += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bW.toFixed(1)}" height="${h.toFixed(1)}" fill="${color}" opacity="${i % 2 === 0 ? 0.95 : 0.75}"/>`;
+          if (labels?.[i])
+            s += `<text x="${(x + bW / 2).toFixed(1)}" y="${H - 4}" text-anchor="middle" font-size="9" fill="#8C7F7B">${labels[i]}</text>`;
+        });
+
+        s += "</svg>";
+        return s;
+      }
+
+      /* ── Donut chart ── */
+      function renderDonut() {
+        const data = D.catSales,
+          colors = D.catColors,
+          labels = D.cats;
+        const cx = 90,
+          cy = 90,
+          r = 62,
+          sw = 26;
+        const circ = 2 * Math.PI * r;
+        const total = data.reduce((a, b) => a + b, 0);
+
+        let s = `<svg viewBox="0 0 180 180" width="180" style="display:block;flex-shrink:0">`;
+        s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#DEDAD7" stroke-width="${sw}"/>`;
+
+        let cumDeg = 0;
+        data.forEach((v, i) => {
+          const frac = v / total;
+          const dl = (frac * circ).toFixed(2);
+          const gap = (circ * (1 - frac)).toFixed(2);
+          s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[i]}" stroke-width="${sw}" stroke-dasharray="${dl} ${gap}" transform="rotate(${(-90 + cumDeg).toFixed(2)} ${cx} ${cy})"/>`;
+          cumDeg += frac * 360;
+        });
+
+        s += "</svg>";
+        document.getElementById("ch-donut").innerHTML = s;
+
+        // Legend
+        const total2 = total;
+        let leg = "";
+        data.forEach((v, i) => {
+          const pct = ((v / total2) * 100).toFixed(1);
+          leg += `<div class="leg-item">
+      <div class="leg-dot" style="background:${colors[i]}"></div>
+      <span class="leg-name">${labels[i]}</span>
+      <span class="leg-pct">${pct}%</span>
+    </div>`;
+        });
+        document.getElementById("cat-legend").innerHTML = leg;
+      }
+
+      /* ============================================================
+   HORIZONTAL BARS
+============================================================ */
+      function hBars(items, color, unit) {
+        const max = items[0].q;
+        return items
+          .map(
+            (it) => `
+    <div class="hb">
+      <div class="hb-meta">
+        <span class="hb-name">${it.n}</span>
+        <span class="hb-val">${it.q} ${unit}</span>
+      </div>
+      <div class="hb-track"><div class="hb-fill" style="width:${((it.q / max) * 100).toFixed(1)}%;background:${color}"></div></div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      /* ============================================================
+   MARGINS TABLE
+============================================================ */
+      function marginsTable() {
+        const rows = D.margins
+          .map((r) => {
+            const cls = r.m >= 75 ? "good" : r.m >= 60 ? "" : "warn";
+            return `<tr>
+      <td>${r.n}</td>
+      <td class="r">$${r.p.toFixed(2)}</td>
+      <td class="r">$${r.c.toFixed(2)}</td>
+      <td class="r">$${(r.p - r.c).toFixed(2)}</td>
+      <td class="r ${cls}">${r.m.toFixed(1)}%</td>
+    </tr>`;
+          })
+          .join("");
+        return `<thead><tr>
+    <th>Platillo</th>
+    <th class="r">Precio</th>
+    <th class="r">Costo Est.</th>
+    <th class="r">Ganancia</th>
+    <th class="r">Margen</th>
+  </tr></thead><tbody>${rows}</tbody>`;
+      }
+
+      /* ============================================================
+   RETURNS LIST
+============================================================ */
+      function returnsList() {
+        return D.returns
+          .map(
+            (r) => `
+    <div class="ret-item">
+      <div class="ret-badge">${r.count}</div>
+      <div>
+        <div class="ret-name">${r.n}</div>
+        <div class="ret-reason">${r.reason}</div>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      /* ============================================================
+   STARS & RATING
+============================================================ */
+      function starsHTML(rating) {
+        const full = Math.floor(rating);
+        const half = rating % 1 >= 0.5 ? 1 : 0;
+        const empty = 5 - full - half;
+        return (
+          '<span style="color:#C9996B">' +
+          "★".repeat(full) +
+          ('</span><span style="color:#C9996B;opacity:.5">' +
+            "★".repeat(half) +
+            '</span><span style="color:#DEDAD7">' +
+            "★".repeat(empty) +
+            "</span>")
+        );
+      }
+
+      function ratingDistHTML() {
+        const max = Math.max(...D.ratingDist);
+        const total = D.ratingDist.reduce((a, b) => a + b, 0);
+        return [...D.ratingDist]
+          .reverse()
+          .map((n, i) => {
+            const star = 5 - i;
+            return `<div class="sr">
+      <span class="sr-l">${star}</span>
+      <div class="sr-track"><div class="sr-fill" style="width:${((n / max) * 100).toFixed(1)}%"></div></div>
+      <span class="sr-n">${n}</span>
+    </div>`;
+          })
+          .join("");
+      }
+
+      /* ============================================================
+   TOAST
+============================================================ */
+      let _tt;
+      function toast(msg) {
+        const el = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        el.classList.add("on");
+        clearTimeout(_tt);
+        _tt = setTimeout(() => el.classList.remove("on"), 2200);
+      }
+    </script>
+  </body>
+</html>

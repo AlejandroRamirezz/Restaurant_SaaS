@@ -137,6 +137,32 @@
         margin-top: 0.45rem;
       }
 
+      /* ── ADMIN BUTTON (welcome screen, top-right) ── */
+      .w-admin-btn {
+        position: absolute;
+        top: calc(1rem + var(--safe-t));
+        right: 1.25rem;
+        z-index: 2;
+        background: rgba(237, 233, 230, 0.1);
+        border: 1px solid rgba(237, 233, 230, 0.18);
+        color: rgba(237, 233, 230, 0.65);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 0.4rem 0.8rem;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .w-admin-btn:hover {
+        background: rgba(237, 233, 230, 0.2);
+        color: rgba(237, 233, 230, 0.9);
+      }
+
       .w-form {
         position: relative;
         z-index: 1;
@@ -233,18 +259,6 @@
       /* ============================================================
        MENU
     ============================================================ */
-
-      .ic-img-wrap picture {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      .ic-img-wrap picture img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
       #s-menu {
         background: var(--cream);
       }
@@ -277,6 +291,17 @@
         font-size: 0.68rem;
         color: rgba(237, 233, 230, 0.5);
         margin-top: 2px;
+      }
+      .staff-lnk {
+        color: rgba(237, 233, 230, 0.28);
+        text-decoration: none;
+        font-size: 0.6rem;
+        letter-spacing: 0.06em;
+        margin-left: 0.2rem;
+        transition: color 0.15s;
+      }
+      .staff-lnk:hover {
+        color: rgba(237, 233, 230, 0.55);
       }
 
       .cart-btn {
@@ -387,6 +412,30 @@
         aspect-ratio: 4 / 3;
         overflow: hidden;
         background: #d9d5d2;
+      }
+      .ic-img-wrap picture {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .ic-img-wrap picture img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .cart-row picture {
+        display: block;
+        width: 54px;
+        height: 54px;
+        flex-shrink: 0;
+      }
+
+      .cart-row picture img {
+        width: 54px;
+        height: 54px;
+        object-fit: cover;
       }
 
       .ic-img {
@@ -1083,13 +1132,32 @@
      WELCOME
 ============================================================ -->
     <section id="s-welcome" class="screen active" aria-label="Welcome">
-      <img
-        class="w-bg"
-        loading="eager"
-        src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&dpr=1"
-        alt=""
-        aria-hidden="true"
-      />
+      <picture
+        style="
+          position: absolute;
+          inset: 0;
+          display: block;
+          width: 100%;
+          height: 100%;
+        "
+      >
+        <source
+          type="image/avif"
+          srcset="
+            https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&dpr=1&fm=avif
+          "
+        />
+        <img
+          class="w-bg"
+          loading="eager"
+          src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&dpr=1&fm=jpg"
+          alt=""
+          aria-hidden="true"
+        />
+      </picture>
+
+      <!-- Admin shortcut — top-right corner -->
+      <a href="admin.html" class="w-admin-btn">Staff</a>
 
       <div class="w-top">
         <div class="logo-block" aria-hidden="true">
@@ -1139,7 +1207,8 @@
               >Table&nbsp;<span id="h-tnum">3</span>&nbsp;·&nbsp;<span
                 id="h-name"
               ></span
-            ></span>
+              ><a href="admin.html" class="staff-lnk">· Staff</a></span
+            >
           </div>
           <button class="cart-btn" onclick="goCart()" aria-label="View cart">
             <svg viewBox="0 0 24 24">
@@ -1438,262 +1507,183 @@
             id: "p1",
             name: "Margherita",
             price: 13.9,
-            img: {
-              avif: "images-avif/margarita.avif",
-              fallback: "images/margarita.jpg",
-            },
+            img: "https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg",
             desc: "Tomato sauce, mozzarella, fresh basil, and olive oil.",
           },
           {
             id: "p2",
             name: "Pepperoni",
             price: 14.9,
-            img: {
-              avif: "images-avif/pepperoni.avif",
-              fallback: "images/pepperoni.jpeg",
-            },
+            img: "https://images.pexels.com/photos/2147491/pexels-photo-2147491.jpeg",
             desc: "Tomato sauce, mozzarella, pepperoni, and oregano.",
           },
           {
             id: "p3",
             name: "Four Cheese",
             price: 15.5,
-            img: {
-              avif: "images-avif/pepperoni2.avif",
-              fallback: "images/pepperoni2.jpeg",
-            },
+            img: "https://images.pexels.com/photos/4109111/pexels-photo-4109111.jpeg",
             desc: "Mozzarella, parmesan, gorgonzola, and ricotta.",
           },
           {
             id: "p4",
             name: "BBQ Chicken",
             price: 15.9,
-            img: {
-              avif: "images-avif/pizza_bacon.avif",
-              fallback: "images/pizza_bacon.jpeg",
-            },
+            img: "https://images.pexels.com/photos/3682837/pexels-photo-3682837.jpeg",
             desc: "BBQ sauce, mozzarella, grilled chicken, red onion, and cilantro.",
           },
           {
             id: "p5",
             name: "Veggie",
             price: 13.5,
-            img: {
-              avif: "images-avif/pepperoni3.avif",
-              fallback: "images/pepperoni3.jpeg",
-            },
+            img: "https://images.pexels.com/photos/1552635/pexels-photo-1552635.jpeg",
             desc: "Tomato sauce, mozzarella, mushrooms, bell peppers, red onion, olives, cherry tomatoes.",
           },
           {
             id: "p6",
             name: "Spicy Italian",
             price: 16.9,
-            img: {
-              avif: "images-avif/pepperoni.avif",
-              fallback: "images/pepperoni.jpeg",
-            },
+            img: "https://images.pexels.com/photos/5765893/pexels-photo-5765893.jpeg",
             desc: "Tomato sauce, mozzarella, Italian sausage, pepperoni, jalapeños, chili flakes.",
           },
         ],
-
         pastas: [
           {
             id: "pa1",
             name: "Spaghetti Bolognese",
             price: 13.9,
-            img: {
-              avif: "images-avif/pasta1.avif",
-              fallback: "images/pasta1.jpeg",
-            },
+            img: "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg",
             desc: "Spaghetti served with slow-cooked beef and tomato sauce.",
           },
           {
             id: "pa2",
             name: "Fettuccine Alfredo",
             price: 12.9,
-            img: {
-              avif: "images-avif/pasta2.avif",
-              fallback: "images/pasta2.jpeg",
-            },
+            img: "https://images.pexels.com/photos/5949884/pexels-photo-5949884.jpeg",
             desc: "Fettuccine pasta tossed in a creamy parmesan sauce.",
           },
           {
             id: "pa3",
             name: "Penne Arrabbiata",
             price: 11.9,
-            img: {
-              avif: "images-avif/pasta1.avif",
-              fallback: "images/pasta1.jpeg",
-            },
+            img: "https://images.pexels.com/photos/1460872/pexels-photo-1460872.jpeg",
             desc: "Penne with spicy tomato sauce, garlic, chili flakes, and parsley.",
           },
           {
             id: "pa4",
             name: "Pesto Chicken",
             price: 14.5,
-            img: {
-              avif: "images-avif/chicken.avif",
-              fallback: "images/chicken.jpeg",
-            },
+            img: "https://images.pexels.com/photos/3056061/pexels-photo-3056061.jpeg",
             desc: "Pasta with basil pesto, grilled chicken, parmesan, and cherry tomatoes.",
           },
           {
             id: "pa5",
             name: "Lasagna",
             price: 14.9,
-            img: {
-              avif: "images-avif/lasagna.avif",
-              fallback: "images/lasagna.jpeg",
-            },
+            img: "https://images.pexels.com/photos/4116637/pexels-photo-4116637.jpeg",
             desc: "Layers of pasta, beef ragù, tomato sauce, mozzarella, and parmesan.",
           },
         ],
-
         salads: [
           {
             id: "s1",
             name: "Caesar Salad",
             price: 9.9,
-            img: {
-              avif: "images-avif/salad.avif",
-              fallback: "images/salad.jpg",
-            },
+            img: "https://images.pexels.com/photos/1059905/pexels-photo-1059905.jpeg",
             desc: "Romaine lettuce, parmesan, croutons, and Caesar dressing.",
           },
           {
             id: "s2",
             name: "Caprese Salad",
             price: 10.9,
-            img: {
-              avif: "images-avif/salad3.avif",
-              fallback: "images/salad3.jpeg",
-            },
+            img: "https://images.pexels.com/photos/1211887/pexels-photo-1211887.jpeg",
             desc: "Fresh mozzarella, tomatoes, basil, olive oil, and balsamic glaze.",
           },
           {
             id: "s3",
             name: "Garden Salad",
             price: 8.5,
-            img: {
-              avif: "images-avif/salad4.avif",
-              fallback: "images/salad4.jpeg",
-            },
+            img: "https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg",
             desc: "Mixed greens, cherry tomatoes, cucumber, carrots, red onion, house dressing.",
           },
           {
             id: "s4",
             name: "Chicken Pesto Salad",
             price: 12.5,
-            img: {
-              avif: "images-avif/fishsalad.avif",
-              fallback: "images/fishsalad.jpeg",
-            },
+            img: "https://images.pexels.com/photos/2673353/pexels-photo-2673353.jpeg",
             desc: "Mixed greens, grilled chicken, cherry tomatoes, parmesan, pesto dressing.",
           },
         ],
-
         entrees: [
           {
             id: "e1",
             name: "Chicken Parmesan",
             price: 16.9,
-            img: {
-              avif: "images-avif/chicken.avif",
-              fallback: "images/chicken.jpeg",
-            },
+            img: "https://images.pexels.com/photos/5949889/pexels-photo-5949889.jpeg",
             desc: "Breaded chicken breast with tomato sauce and mozzarella, served with pasta.",
           },
           {
             id: "e2",
             name: "Grilled Salmon",
             price: 18.9,
-            img: {
-              avif: "images-avif/fish.avif",
-              fallback: "images/fish.jpg",
-            },
+            img: "https://images.pexels.com/photos/725991/pexels-photo-725991.jpeg",
             desc: "Salmon fillet with roasted vegetables and lemon butter sauce.",
           },
           {
             id: "e3",
             name: "Italian Meatballs",
             price: 13.9,
-            img: {
-              avif: "images-avif/sauces.avif",
-              fallback: "images/sauces.jpg",
-            },
+            img: "https://images.pexels.com/photos/3763847/pexels-photo-3763847.jpeg",
             desc: "Beef meatballs in marinara sauce with parmesan and toasted bread.",
           },
           {
             id: "e4",
             name: "Eggplant Parmesan",
             price: 14.5,
-            img: {
-              avif: "images-avif/lasagna2.avif",
-              fallback: "images/lasagna2.jpeg",
-            },
+            img: "https://images.pexels.com/photos/6419748/pexels-photo-6419748.jpeg",
             desc: "Breaded eggplant layered with tomato sauce, mozzarella, and parmesan.",
           },
         ],
-
         drinks: [
           {
             id: "d1",
             name: "Soft Drinks",
             price: 2.9,
-            img: {
-              avif: "images-avif/joy.avif",
-              fallback: "images/joy.jpeg",
-            },
+            img: "https://images.pexels.com/photos/50593/pexels-photo-50593.jpeg",
             desc: "Coca-Cola, Diet Coke, Sprite, Fanta, and iced tea.",
           },
           {
             id: "d2",
             name: "Lemonade",
             price: 3.5,
-            img: {
-              avif: "images-avif/joy.avif",
-              fallback: "images/joy.jpeg",
-            },
+            img: "https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg",
             desc: "Fresh lemonade served chilled.",
           },
           {
             id: "d3",
             name: "Sparkling Water",
             price: 2.5,
-            img: {
-              avif: "images-avif/water.avif",
-              fallback: "images/water.jpeg",
-            },
+            img: "https://images.pexels.com/photos/3621954/pexels-photo-3621954.jpeg",
             desc: "Premium sparkling mineral water.",
           },
           {
             id: "d4",
             name: "Still Water",
             price: 1.9,
-            img: {
-              avif: "images-avif/water.avif",
-              fallback: "images/water.jpeg",
-            },
+            img: "https://images.pexels.com/photos/327090/pexels-photo-327090.jpeg",
             desc: "Bottled natural water.",
           },
           {
             id: "d5",
             name: "Italian Soda",
             price: 3.9,
-            img: {
-              avif: "images-avif/joy.avif",
-              fallback: "images/joy.jpeg",
-            },
+            img: "https://images.pexels.com/photos/2802527/pexels-photo-2802527.jpeg",
             desc: "Sparkling soda — strawberry, peach, raspberry, or lemon.",
           },
           {
             id: "d6",
             name: "Coffee",
             price: 3.5,
-            img: {
-              avif: "images-avif/coffee.avif",
-              fallback: "images/coffee.jpeg",
-            },
+            img: "https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg",
             desc: "Espresso, Americano, cappuccino, and latte.",
           },
         ],
@@ -1813,6 +1803,28 @@
       }
 
       /* ----------------------------------------------------------
+   IMAGE HELPER — <picture> with AVIF + JPEG fallback
+---------------------------------------------------------- */
+      function picHTML(base, alt, imgClass, dW, dH, pxW = 320, pxH = 240) {
+        const q = `auto=compress&cs=tinysrgb&w=${pxW}&h=${pxH}&dpr=1&fit=crop`;
+
+        return `
+    <picture>
+      <source type="image/avif" srcset="${base}?${q}&fm=avif">
+      <img
+        class="${imgClass}"
+        src="${base}?${q}&fm=jpg"
+        alt="${alt}"
+        loading="lazy"
+        width="${dW}"
+        height="${dH}"
+        onerror="this.closest('picture').parentElement.style.background='#C9996B1A'"
+      >
+    </picture>
+  `;
+      }
+
+      /* ----------------------------------------------------------
    MENU DOM
 ---------------------------------------------------------- */
       function buildMenuDOM() {
@@ -1838,42 +1850,20 @@
         });
       }
 
-      function menuImageHTML(item, imgClass, width, height) {
-        return `
-    <picture>
-      <source srcset="${item.img.avif}" type="image/avif">
-      <img
-        class="${imgClass}"
-        src="${item.img.fallback}"
-        alt="${item.name}"
-        loading="lazy"
-        width="${width}"
-        height="${height}"
-        onerror="this.parentElement.parentElement.style.background='#C9996B1A'"
-      >
-    </picture>
-  `;
-      }
-
       function makeCard(item) {
         const el = document.createElement("div");
         el.className = "item-card";
         el.id = "icard-" + item.id;
-
         el.innerHTML = `
-    <div class="ic-img-wrap">
-      ${menuImageHTML(item, "ic-img", 160, 120)}
-    </div>
-    <div class="ic-body">
+      <div class="ic-img-wrap">${picHTML(item.img, item.name, "ic-img", 160, 120, 320, 240)}</div>    
+      <div class="ic-body">
       <div class="ic-name">${item.name}</div>
       <div class="ic-desc">${item.desc}</div>
       <div class="ic-foot">
         <span class="ic-price">$${item.price.toFixed(2)}</span>
         <div id="ctrl-${item.id}">${ctrlHTML(item.id, ST.cart[item.id]?.qty || 0)}</div>
       </div>
-    </div>
-  `;
-
+    </div>`;
         return el;
       }
 
@@ -1991,17 +1981,7 @@
         let rows = "";
         for (const { item, qty } of Object.values(ST.cart)) {
           rows += `<div class="cart-row">
-     <picture>
-  <source srcset="${item.img.avif}" type="image/avif">
-  <img
-    class="cr-img"
-    src="${item.img.fallback}"
-    alt="${item.name}"
-    loading="lazy"
-    width="54"
-    height="54"
-  >
-</picture>
+      ${picHTML(item.img, item.name, "cr-img", 54, 54, 120, 120)}
       <div class="cr-info">
         <div class="cr-name">${item.name}</div>
         <div class="cr-price">$${(item.price * qty).toFixed(2)}</div>
